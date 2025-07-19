@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import { motion } from "motion/react";
+import { animate, inView, motion } from "motion/react";
+import { FaPlay } from "react-icons/fa";
 
 function Carousel({ cardPerPage = 5, totalSongs = 15, scrollBy = 3 }) {
   const [index, setIndex] = useState(0);
@@ -64,22 +64,43 @@ function Carousel({ cardPerPage = 5, totalSongs = 15, scrollBy = 3 }) {
 export default Carousel;
 
 function CarouselCard({ cardPerPage, idx }) {
+  const [hover, setIsHover] = useState(false);
   return (
     <div
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
       style={{
         width: `calc((100% - ${cardPerPage} * 0.25rem) / ${cardPerPage})`,
       }}
       className="h-fit  flex-col justify-center
-          text-white shrink-0  p-3  hover:bg-[#1f1f1f] rounded-[8px] cursor-pointer"
+          text-white shrink-0  p-3   hover:bg-[#1f1f1f] rounded-[8px] cursor-pointer"
     >
-      <img
-        src={`img${idx + 1}.jpg`}
-        className="rounded w-full h-[140px] object-cover"
-      />
+      <div
+        className="rounded w-full relative h-[140px] bg-cover bg-center"
+        style={{ backgroundImage: `url(img${idx + 1}.jpg)` }}
+      >
+        <PlayMusicBtn hover={hover} />
+      </div>
 
       <p className="text-white font-medium mt-2">Sahiba</p>
       <a className="text-[14px] text-[#B3B3B3]">Aditiya Rikhari</a>
     </div>
+  );
+}
+
+function PlayMusicBtn({ hover }) {
+  return (
+    <motion.button
+      variants={{
+        initial: { y: 7, opacity: 0 },
+        animate: { y: 0, opacity: 1 },
+      }}
+      initial="initial"
+      animate={hover ? "animate" : "initial"}
+      className="size-12 absolute right-2 bottom-2  hover:bg-[#3BE477] cursor-pointer bg-[#1ED760] text-black flex justify-center items-center rounded-full "
+    >
+      <FaPlay />
+    </motion.button>
   );
 }
 
